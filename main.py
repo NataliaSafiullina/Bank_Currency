@@ -45,7 +45,8 @@ def job_text(message):
 
 @bot.message_handler(content_types=['text'])
 def job_text(message):
-    bot.reply_to(message, f"Привет, {message.chat.username}")
+    message_text = 'тут будут конвертирование валют'
+    bot.reply_to(message, message_text)
 
 
 bot.polling(none_stop=True)
