@@ -1,26 +1,18 @@
 import telebot
+from config import currencies, TOKEN
+from extensions import ConvertionException, ConverterClass
 
-TOKEN = "6409800714:AAHkmZmobG1sCuDZIusrYSK0rqPy9i5-_RQ"
 bot = telebot.TeleBot(TOKEN)
 
-currencies = {
-    'бат': 'THB',
-    'дирхам': 'AED',
-    'доллар': 'USD',
-    'евро': 'EUR',
-    'рубль': 'RUB',
-    'тенге': 'KZT',
-    'юань': 'CNY'
-}
 
 @bot.message_handler(commands=['start'])
 def job_comands_start(message):
     message_text = f'Привет, {message.chat.username}! ' \
-                   f'\n Я - бот-конвертер валют.' \
-                   f'\n Напиши: <валюта_исходная> <валюта_целевая> <сумма>.' \
-                   f'\n Доступные команды:' \
-                   f'\n /help - помощь ' \
-                   f'\n /values - список валют'
+                   '\n Я - бот-конвертер валют.' \
+                   '\n Напиши: <валюта_исходная> <валюта_целевая> <сумма>.' \
+                   '\n Доступные команды:' \
+                   '\n /help - помощь ' \
+                   '\n /values - список валют'
     bot.reply_to(message, message_text)
 
 @bot.message_handler(commands=['help'])
@@ -43,10 +35,22 @@ def job_comands_values(message):
 def job_text(message):
     bot.reply_to(message, f"Nice photo, {message.chat.username}")
 
-@bot.message_handler(content_types=['text'])
+@bot.message_handler(content_types=['text', ])
 def job_text(message):
-    message_text = 'тут будут конвертирование валют'
-    bot.reply_to(message, message_text)
-
+    try:
+        values = message.text.split()
+        if len(values) != 3:
+            raise ConvertionException('Не корректное количество параметров')
+        quote, base, amount = values
+        sum_base = ConverterClass.get_price(quote.lower(), base.lower(), amount)
+        message_text = f'{amount} {quote} = {sum_base} {base}'
+    except ConvertionException as e:
+        bot.reply_to(message, f'Ошибка ввода.\n{e}')
+    except Exception as e:
+        bot.reply_to(message, f"Не удалось обработать команду.\n{e}")
+    else:
+        bot.reply_to(message, message_text)
 
 bot.polling(none_stop=True)
+
+
