@@ -1,4 +1,4 @@
-TOKEN = "6409800714:AAHkmZmobG1sCuDZIusrYSK0rqPy9i5-_RQ"
+TOKEN = "3333333333:AAHkmZmobG1sCuDZIusrYSK0rqPy9i5-_RQ"
 
 currencies = {
     'биткоин': 'BTC',
