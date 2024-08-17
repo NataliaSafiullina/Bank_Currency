@@ -1,5 +1,9 @@
+'''
+Это наш телеграм-бот Exchange_money (@M18_Exchange_money_bot)
+'''
 import telebot
-from config import currencies, TOKEN
+from config import currencies
+from token import TOKEN
 from extensions import ConvertionException, ConverterClass
 
 bot = telebot.TeleBot(TOKEN)
